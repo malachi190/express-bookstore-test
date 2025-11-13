@@ -1,0 +1,69 @@
+version: '3'
+
+vars:
+  NAME: "{{now | date \"20060102_150405\"}}"
+
+tasks:
+  install:
+    desc: Install dependencies
+    cmds:
+      - npm install
+  
+  migrate-docker: 
+    desc: Run Prisma migrations inside the Docker container
+    cmds:
+      - docker exec -it bookstore_api npx prisma migrate dev --name "{{.NAME}}"
+  
+  migrate: 
+    desc: Run local Prisma migrations (requires NAME variable)
+    cmds:
+      - npx prisma migrate dev --name "{{.NAME}} --env-file ./.env"
+  
+  docker-build:
+    desc: Build and start all Docker containers
+    cmds: 
+      - docker-compose up -d --build
+
+  prisma-generate-docker:
+    desc: Generate Prisma client inside Docker
+    cmds:
+      - docker exec -it bookstore_api npx prisma generate
+  
+  pull-db-docker:
+    desc: Pull the current DB schema from Docker
+    cmds:
+      - docker exec -it bookstore_api npx prisma db pull
+
+  docker-down: 
+    desc: Shutdown and remove docker container
+    cmds: 
+      - docker compose down 
+
+  dev:
+    desc: Start Express.js server in development mode
+    cmds:
+      - npm run dev
+    env:
+      NODE_ENV: development
+
+  start:
+    desc: Start Express.js server in production mode
+    cmds:
+      - npm start
+    env:
+      NODE_ENV: production
+
+  lint:
+    desc: Run ESLint on the project
+    cmds:
+      - npx eslint .
+
+  test:
+    desc: Run tests
+    cmds:
+      - npm test
+
+  build:
+    desc: Build project (if using TypeScript or bundler)
+    cmds:
+      - npx tsc
