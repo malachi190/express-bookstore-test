@@ -1,4 +1,4 @@
-# 📚 Express.js Bookstore API --- Monitoring & Observability Demo
+# 📚 Express.js Bookstore API | Monitoring & Observability Demo
 
 A lightweight **Express.js bookstore server** built to learn and
 demonstrate **monitoring**, **metrics**, and **observability** using
